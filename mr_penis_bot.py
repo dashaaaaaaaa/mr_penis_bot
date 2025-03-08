@@ -1,6 +1,7 @@
 import random
 import asyncio
 from aiogram import Bot, Dispatcher, types
+from aiogram.types import InlineQueryResultArticle, InputTextMessageContent
 from aiogram.filters import ChatMemberUpdatedFilter, MEMBER, ADMINISTRATOR
 from aiogram.types import ChatMemberUpdated
 from aiogram.enums import ChatType
