@@ -28,12 +28,26 @@ random_messages = [
     "Ты — Дарья Ольховик! ГЛАВНЫЙ ЧЛЕН ГОЙДААААААА БАЗА"
 ]
 
-# Фильтр сообщений, если тегнули бота
-@dp.message()
-async def mention_response(message: types.Message):
-    if message.chat.type in [ChatType.GROUP, ChatType.SUPERGROUP]:
-        if message.text and (message.bot or f"@{(await bot.me()).username}" in message.text):
-            await message.reply(random.choice(random_messages))
+# Обработчик Inline-запросов
+@dp.inline_query()
+async def inline_query_handler(inline_query: types.InlineQuery):
+    query = inline_query.query  # Запрос, который пользователь вводит после @botname
+
+    # Если запрос пустой, не показываем результаты
+    if not query:
+        return
+
+    # Формируем результаты запроса
+    results = [
+        InlineQueryResultArticle(
+            id=random.randint(1, 1000000),  # Уникальный ID для каждого результата
+            title="Кто ты из MR PENIS CHAT?",  # Название подсказки
+            input_message_content=InputTextMessageContent(random.choice(random_messages))  # Содержимое сообщения
+        )
+    ]
+
+    # Отправляем результаты запроса (показ подсказок)
+    await bot.answer_inline_query(inline_query.id, results)
 
 # Запуск бота
 async def main():
