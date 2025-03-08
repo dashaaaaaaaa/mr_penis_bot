@@ -14,8 +14,11 @@ dp = Dispatcher()
 # Список рандомных сообщений
 random_messages = [
     "Ты – Катя Пряхина! Ты хочешь отсосать на профсе",
-    "Ты — Анатолий Ларкин! Ты хочешь ебаться с Тимуром в громакс",
+    "Ты – Князев! Жаль, что далеко не все поймут в чем же дело)))) действительно тонко)))) не так уж много образованных в наше время, кто знает, почему это так интересно и необычно",
+    "Ты — Анатолий Ларкин! СОСИ ЯЙЦА",
+    "Ты — Анатолий Ларкин! шило мыло хуй анатолий ларкин",
     "Ты — Тимур Кулагин! Ты хочешь ебаться с Анатолием в громакс",
+    "Ты — Тимур Кулагин! ебись в яйца",
     "Ты — Александр Милек! Ты хочешь ебаться с Анатолием и Тимуром в громакс, но тебя не берут",
     "Ты — Игорь Шарпилов! Игорь иди нахуй",
     "Ты — Екатерина Столбова! КАК ЖЕ МНЕ ПОХУЙ ZZZZ VVVVVVV",
@@ -29,20 +32,26 @@ random_messages = [
     "Ты — Дарья Ольховик! ГЛАВНЫЙ ЧЛЕН ГОЙДААААААА БАЗА"
 ]
 
-@dp.inline_handler()
+@dp.inline_query()
 async def inline_query_handler(inline_query: types.InlineQuery):
-    if not inline_query.query:
-        return
-    text = random.choice(random_messages)
-    result = InlineQueryResultArticle(
-        id='1',
-        title='Тест inline',
-        input_message_content=InputTextMessageContent(text)
-    )
-    await bot.answer_inline_query(inline_query.id, [result], cache_time=1)
+    query = inline_query.query  # Запрос, который пользователь вводит после @botname
 
+    # Не проверяем на пустой запрос — всегда возвращаем результаты
+    results = [
+        InlineQueryResultArticle(
+            id=str(random.randint(1, 1000000)),  # Приводим id к строке
+            title="Кто ты из MR PENIS CHAT?",      # Название подсказки
+            input_message_content=InputTextMessageContent(message_text=random.choice(random_messages))
+        )
+    ]
+
+    # Отправляем результаты запроса (показ подсказок)
+    await bot.answer_inline_query(inline_query.id, results, cache_time=0)
+
+
+# Запуск бота
 async def main():
-    await dp.start_polling()
+    await dp.start_polling(bot)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     asyncio.run(main())
