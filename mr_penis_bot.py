@@ -29,30 +29,20 @@ random_messages = [
     "Ты — Дарья Ольховик! ГЛАВНЫЙ ЧЛЕН ГОЙДААААААА БАЗА"
 ]
 
-# Обработчик Inline-запросов
-@dp.inline_query()
+@dp.inline_handler()
 async def inline_query_handler(inline_query: types.InlineQuery):
-    query = inline_query.query  # Запрос, который пользователь вводит после @botname
-
-    # Если запрос пустой, не показываем результаты
-    if not query:
+    if not inline_query.query:
         return
+    text = random.choice(random_messages)
+    result = InlineQueryResultArticle(
+        id='1',
+        title='Тест inline',
+        input_message_content=InputTextMessageContent(text)
+    )
+    await bot.answer_inline_query(inline_query.id, [result], cache_time=1)
 
-    # Формируем результаты запроса
-    results = [
-        InlineQueryResultArticle(
-            id=random.randint(1, 1000000),  # Уникальный ID для каждого результата
-            title="Кто ты из MR PENIS CHAT?",  # Название подсказки
-            input_message_content=InputTextMessageContent(random.choice(random_messages))  # Содержимое сообщения
-        )
-    ]
-
-    # Отправляем результаты запроса (показ подсказок)
-    await bot.answer_inline_query(inline_query.id, results)
-
-# Запуск бота
 async def main():
-    await dp.start_polling(bot)
+    await dp.start_polling()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     asyncio.run(main())
