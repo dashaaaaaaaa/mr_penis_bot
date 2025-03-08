@@ -9,7 +9,7 @@ from aiogram.enums import ChatType
 TOKEN = "7720767705:AAGCz87dzusbLM1zrKMLh04jvnfHSwnloKE"
 
 bot = Bot(token=TOKEN)
-dp = Dispatcher()
+dp = Dispatcher(bot)
 
 # Список рандомных сообщений
 random_messages = [
